@@ -1,0 +1,40 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local flying = false
+local bodyVelocity
+
+local screenGui = Instance.new("ScreenGui", player.PlayerGui)
+local flyButton = Instance.new("TextButton")
+
+flyButton.Size = UDim2.new(0, 200, 0, 50)
+flyButton.Position = UDim2.new(0.5, -100, 0.9, -25)
+flyButton.Text = "Start Flying"
+flyButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+flyButton.Parent = screenGui
+
+local function startFlying()
+    if flying then return end
+    flying = true
+    bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(0, 50, 0)
+    bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+    bodyVelocity.Parent = character.PrimaryPart
+end
+
+local function stopFlying()
+    if not flying then return end
+    flying = false
+    bodyVelocity:Destroy()
+end
+
+flyButton.MouseButton1Click:Connect(function()
+    if flying then
+        stopFlying()
+        flyButton.Text = "Start Flying"
+        flyButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    else
+        startFlying()
+        flyButton.Text = "Stop Flying"
+        flyButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    end
+end)
